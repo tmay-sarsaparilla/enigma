@@ -1,6 +1,6 @@
 """Module for constructing rotors"""
 
-from enigma.functions.rotors.defineRotors import interface, rotorDict, reflectorDict
+from enigma.functions.rotors.defineRotors import interface, switchboard, rotorDict, reflectorDict
 
 
 def constructInterface():
@@ -10,6 +10,15 @@ def constructInterface():
     interface.build()
 
     return interface
+
+
+def constructSwitchboard():
+    """Function to construct the switchboard"""
+
+    # Build the switchboard
+    switchboard.build()
+
+    return switchboard
 
 
 def constructRotorFromId(rotorId):
@@ -54,6 +63,9 @@ def constructRotors(leftRotorId, middleRotorId, rightRotorId, reflectorId):
     # Build the interface rotor
     interface = constructInterface()
 
+    # Build the switchboard
+    switchboard = constructSwitchboard()
+
     # Build all requested rotors
     leftRotor = constructRotorFromId(leftRotorId)
     middleRotor = constructRotorFromId(middleRotorId)
@@ -67,7 +79,7 @@ def constructRotors(leftRotorId, middleRotorId, rightRotorId, reflectorId):
     # Build the requested reflector
     reflector = constructReflectorFromId(reflectorId)
 
-    return interface, leftRotor, middleRotor, rightRotor, reflector
+    return interface, switchboard, leftRotor, middleRotor, rightRotor, reflector
 
 
 if __name__ == "__main__":
@@ -76,6 +88,7 @@ if __name__ == "__main__":
 
     (
         interface,
+        switchboard,
         leftRotor,
         middleRotor,
         rightRotor,
@@ -88,6 +101,7 @@ if __name__ == "__main__":
     )
 
     print(interface.data)
+    print(switchboard.data)
     print(leftRotor.data)
     print(middleRotor.data)
     print(rightRotor.data)

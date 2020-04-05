@@ -2,7 +2,7 @@
 
 from string import ascii_uppercase
 import pandas as pd
-from random import choice, seed
+from random import choice, sample, seed
 
 
 class Rotor:
@@ -28,8 +28,8 @@ class Rotor:
 
         return
 
-    def build(self):
-        """Method for building a rotor"""
+    def buildSkeleton(self):
+        """Method for building a rotor skeleton"""
 
         # Get list of all ASCII uppercase letters and list of possible positions
         letters = list(ascii_uppercase)
@@ -49,6 +49,49 @@ class Rotor:
         # Populate the position column such that the seed letter is at position 0
         rotor["position"] = [(i - seedLetterIndex) % 26 for i in positions]
 
+        return rotor, seedLetterIndex, letters, positions
+
+    def pairLetters(self, rotor, letters, positions, chosenLetters):
+        """Method for pairing letters together"""
+
+        # Loop through each letter
+        for i in letters:
+
+            # If an output position has already been assigned, skip the letter
+            if i in chosenLetters:
+
+                continue
+
+            # Find position of letter
+            inputPosition = rotor.loc[i, "position"]
+
+            # Randomly choose a position from the list (which is not the input position)
+            outputPosition = choice([e for e in positions if e != inputPosition])
+
+            # Assign position to letter
+            rotor.loc[i, "outputPosition"] = outputPosition
+
+            # Find the corresponding letter and complete the loop
+            outputLetter = rotor[rotor["position"] == outputPosition].iloc[0]["letter"]
+
+            rotor.loc[outputLetter, "outputPosition"] = inputPosition
+
+            # Add both letters to the chosen letters list
+            chosenLetters.append(i)
+            chosenLetters.append(outputLetter)
+
+            # Remove both input and output positions from possible choices
+            positions.remove(inputPosition)
+            positions.remove(outputPosition)
+
+        return rotor
+
+    def build(self):
+        """Method for building a rotor"""
+
+        # Build the skeleton rotor
+        rotor, seedLetterIndex, letters, positions = self.buildSkeleton()
+
         # Set seed of the randomiser
         seed(seedLetterIndex)
 
@@ -64,6 +107,7 @@ class Rotor:
             # Remove position from possible choices
             positions.remove(outputPosition)
 
+        # Assign the rotor data to the object
         self.data = rotor
 
         return
@@ -201,27 +245,13 @@ class Interface(Rotor):
     def build(self):
         """Method for building an interface rotor"""
 
-        # Get list of all ASCII uppercase letters and list of possible positions
-        letters = list(ascii_uppercase)
-        positions = list(range(0, 26))
-
-        # Build empty rotor table
-        rotor = pd.DataFrame(
-            columns=["letter", "position", "outputPosition"],
-            index=letters
-        )
-
-        # Get index of seed letter in list
-        seedLetterIndex = letters.index(self.seedLetter)
-
-        # Populate the letters column
-        rotor["letter"] = letters
-        # Populate the position column such that the seed letter is at position 0
-        rotor["position"] = [(i - seedLetterIndex) % 26 for i in positions]
+        # Build the skeleton interface
+        rotor, seedLetterIndex, letters, positions = self.buildSkeleton()
 
         # For the interface, output position is the same as input position
         rotor["outputPosition"] = rotor["position"]
 
+        # Assign the rotor data to the object
         self.data = rotor
 
         return
@@ -237,56 +267,72 @@ class Reflector(Rotor):
     def build(self):
         """Method for building a reflector rotor"""
 
-        # Get list of all ASCII uppercase letters and list of possible positions
-        letters = list(ascii_uppercase)
-        positions = list(range(0, 26))
+        # Build the skeleton reflector
+        rotor, seedLetterIndex, letters, positions = self.buildSkeleton()
 
-        # Build empty rotor table
-        rotor = pd.DataFrame(
-            columns=["letter", "position", "outputPosition"],
-            index=letters
-        )
-
-        # Get index of seed letter in list
-        seedLetterIndex = letters.index(self.seedLetter)
-
-        # Populate the letters column
-        rotor["letter"] = letters
-        # Populate the position column such that the seed letter is at position 0
-        rotor["position"] = [(i - seedLetterIndex) % 26 for i in positions]
+        # Set seed of the randomiser
+        seed(seedLetterIndex)
 
         # For the reflector, inputs and outputs need to be paired together
         chosenLetters = []
 
-        for i in letters:
+        # Pair letters together
+        rotor = self.pairLetters(rotor=rotor, letters=letters, positions=positions, chosenLetters=chosenLetters)
 
-            # Find position of letter
-            inputPosition = rotor.loc[i, "position"]
+        # Assign the rotor data to the object
+        self.data = rotor
 
-            # If an output position has already been assigned, skip the letter
-            if i in chosenLetters:
+        return
 
-                continue
 
-            # Randomly choose a position from the list (which is not the input position)
-            outputPosition = choice([e for e in positions if e != inputPosition])
+class Switchboard(Rotor):
+    """Class for enigma switchboard"""
 
-            # Assign position to letter
-            rotor.loc[i, "outputPosition"] = outputPosition
+    def __init__(self, rotorId, seedLetter, numberOfPairs):
 
-            # Find the corresponding letter and complete the loop
-            outputLetter = rotor[rotor["position"] == outputPosition].iloc[0]["letter"]
+        super().__init__(rotorId, seedLetter)
+        self.numberOfPairs = numberOfPairs
 
-            rotor.loc[outputLetter, "outputPosition"] = inputPosition
+    def build(self):
+        """Method for building a switchboard"""
 
-            # Add both letters to the chosen letters list
-            chosenLetters.append(i)
-            chosenLetters.append(outputLetter)
+        # Build the skeleton switchboard
+        rotor, seedLetterIndex, letters, positions = self.buildSkeleton()
 
-            # Remove both input and output positions from possible choices
-            positions.remove(inputPosition)
-            positions.remove(outputPosition)
+        # Set seed of the randomiser
+        seed(seedLetterIndex)
 
+        # For the switchboard we create up to 10 pairs of letters whilst the others remain unaffected
+
+        # Get the total number of pairs (maximum is 10)
+        numberOfPairs = max(self.numberOfPairs, 10)
+
+        # If this number is negative, raise an error
+        if numberOfPairs < 0:
+
+            raise ValueError("Number of switchboard pairs cannot be negative")
+
+        # Select the letters which won't be affected
+        numberUnaffected = 26 - numberOfPairs * 2
+
+        chosenLetters = sample(letters, k=numberUnaffected)
+
+        # These letters should have the same input and output positions
+        for i in chosenLetters:
+
+            # Find the letter position
+            position = rotor.loc[i, "position"]
+
+            # Set as the output position
+            rotor.loc[i, "outputPosition"] = position
+
+            # Remove from list of possible positions
+            positions.remove(position)
+
+        # Then we pair up the others
+        rotor = self.pairLetters(rotor=rotor, letters=letters, positions=positions, chosenLetters=chosenLetters)
+
+        # Assign the rotor data to the object
         self.data = rotor
 
         return
@@ -294,6 +340,8 @@ class Reflector(Rotor):
 
 # Define rotors configurations
 interface = Interface(0, "A")
+
+switchboard = Switchboard(0, "F", 10)
 
 rotor1 = Rotor(1, "B")
 rotor2 = Rotor(2, "Q")
@@ -325,14 +373,22 @@ reflectorDict = {
 
 if __name__ == "__main__":
 
-    rotor_config = Rotor(1, "G")
-    rotor_config.build()
-    print(rotor_config.data)
+    # Test interface
+    interface = Interface(0, "A")
+    interface.build()
+    print(interface.data)
 
-    interface_config = Interface(0, "A")
-    interface_config.build()
-    print(interface_config.data)
+    # Test switchboard
+    switchboard = Switchboard(0, "A", 10)
+    switchboard.build()
+    print(switchboard.data)
 
-    reflector_config = Reflector(1, "C")
-    reflector_config.build()
-    print(reflector_config.data)
+    # Test rotor
+    rotor = Rotor(1, "G")
+    rotor.build()
+    print(rotor.data)
+
+    # Test reflector
+    reflector = Reflector(1, "D")
+    reflector.build()
+    print(reflector.data)
