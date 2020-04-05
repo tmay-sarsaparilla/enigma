@@ -6,6 +6,7 @@ def encryptLetter(
         inputLetter,
         letterIndex,
         interface,
+        switchboard,
         leftRotor,
         middleRotor,
         rightRotor,
@@ -14,7 +15,7 @@ def encryptLetter(
     """Function to encrypt a single letter"""
 
     # The structure of the encryption is thus:
-    #   Interface > left > middle > right > reflector > right > middle > left > interface
+    #   Interface > switchboard > left > middle > right > reflector > right > middle > left > switchboard > interface
 
     # Apply any necessary rotations
     leftRotor.applyRotation(letterIndex=letterIndex)
@@ -26,8 +27,11 @@ def encryptLetter(
     # Get the initial input position from the interface
     interfacePosition = interface.getPositionFromLetter(letter=inputLetter)
 
+    # Get the switchboard output position
+    switchboardOutputPosition = switchboard.crossLeftToRight(inputPosition=interfacePosition)
+
     # Get the left rotor output position
-    leftRotorOutputPosition = leftRotor.crossLeftToRight(inputPosition=interfacePosition)
+    leftRotorOutputPosition = leftRotor.crossLeftToRight(inputPosition=switchboardOutputPosition)
 
     # Get the middle rotor output position
     middleRotorOutputPosition = middleRotor.crossLeftToRight(inputPosition=leftRotorOutputPosition)
@@ -49,8 +53,11 @@ def encryptLetter(
     # Get the left rotor input position
     leftRotorInputPosition = leftRotor.crossRightToLeft(outputPosition=middleRotorInputPosition)
 
+    # Get the switchboard input position
+    switchboardInputPosition = switchboard.crossRightToLeft(outputPosition=leftRotorInputPosition)
+
     # Get the interface output position
-    interfaceOutputPosition = interface.crossRightToLeft(outputPosition=leftRotorInputPosition)
+    interfaceOutputPosition = interface.crossRightToLeft(outputPosition=switchboardInputPosition)
 
     # Get the output letter
     outputLetter = interface.getLetterFromPosition(position=interfaceOutputPosition)
@@ -62,6 +69,7 @@ if __name__ == "__main__":
 
     (
         interface,
+        switchboard,
         leftRotor,
         middleRotor,
         rightRotor,
@@ -80,6 +88,7 @@ if __name__ == "__main__":
         inputLetter=inputLetter,
         letterIndex=letterIndex,
         interface=interface,
+        switchboard=switchboard,
         reflector=reflector,
         leftRotor=leftRotor,
         middleRotor=middleRotor,

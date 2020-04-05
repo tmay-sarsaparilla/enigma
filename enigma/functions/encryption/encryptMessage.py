@@ -36,6 +36,7 @@ def encrypt(
     # Prepare the rotors
     (
         interface,
+        switchboard,
         leftRotor,
         middleRotor,
         rightRotor,
@@ -67,6 +68,7 @@ def encrypt(
                                      inputLetter=letter,
                                      letterIndex=letterIndex,
                                      interface=interface,
+                                     switchboard=switchboard,
                                      reflector=reflector,
                                      leftRotor=leftRotor,
                                      middleRotor=middleRotor,
@@ -87,7 +89,7 @@ def encrypt(
 
 if __name__ == "__main__":
 
-    inputMessage = "PUBZL AVTNI NY"
+    inputMessage = "Hello World!"
 
     reflectorId = 1
 
