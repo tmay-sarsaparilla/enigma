@@ -60,6 +60,9 @@ def constructReflectorFromId(reflectorId):
 def constructRotors(leftRotorId, middleRotorId, rightRotorId, reflectorId):
     """Function for constructing a given set of rotors"""
 
+    # TODO Make starting positions of rotors inputs to this function
+    # TODO Change function to accept a config object instead
+
     # Build the interface rotor
     interface = constructInterface()
 
@@ -75,6 +78,8 @@ def constructRotors(leftRotorId, middleRotorId, rightRotorId, reflectorId):
     leftRotor.setPeriodOfRotation(1)
     middleRotor.setPeriodOfRotation(12)
     rightRotor.setPeriodOfRotation(26)
+
+    # TODO set initial letter in the same way
 
     # Build the requested reflector
     reflector = constructReflectorFromId(reflectorId)

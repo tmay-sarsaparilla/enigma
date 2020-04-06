@@ -8,18 +8,24 @@ from random import choice, sample, seed
 class Rotor:
     """Class for an enigma machine rotor"""
 
-    def __init__(self, rotorId, seedLetter):
+    rotorType = "rotor"
+    # TODO Add rotorType to other rotor types
+
+    def __init__(self, rotorId, seed, initialLetter):
 
         self.id = rotorId
-        self.seedLetter = seedLetter
+        self.seed = seed
+        self.initialLetter = initialLetter
         self.data = None
         self.rotations = 0
         self.periodOfRotation = 0
 
-    def getSeedLetter(self):
-        """Method for retrieving the seed letter of a rotor"""
+    def setInitialLetter(self, initialLetter):
+        """Method for setting the initial letter of a rotor"""
 
-        return self.seedLetter
+        self.initialLetter = initialLetter
+
+        return
 
     def setPeriodOfRotation(self, periodOfRotation):
         """Method for setting the period of rotation of a rotor"""
@@ -42,14 +48,14 @@ class Rotor:
         )
 
         # Get index of seed letter in list
-        seedLetterIndex = letters.index(self.seedLetter)
+        initialLetterIndex = letters.index(self.initialLetter)
 
         # Populate the letters column
         rotor["letter"] = letters
         # Populate the position column such that the seed letter is at position 0
-        rotor["position"] = [(i - seedLetterIndex) % 26 for i in positions]
+        rotor["position"] = [(i - initialLetterIndex) % 26 for i in positions]
 
-        return rotor, seedLetterIndex, letters, positions
+        return rotor, letters, positions
 
     def pairLetters(self, rotor, letters, positions, chosenLetters):
         """Method for pairing letters together"""
@@ -90,10 +96,10 @@ class Rotor:
         """Method for building a rotor"""
 
         # Build the skeleton rotor
-        rotor, seedLetterIndex, letters, positions = self.buildSkeleton()
+        rotor, letters, positions = self.buildSkeleton()
 
         # Set seed of the randomiser
-        seed(seedLetterIndex)
+        seed(self.seed)
 
         # Loop through each letter and assign a random output positions
         for i in letters:
@@ -238,15 +244,15 @@ class Rotor:
 class Interface(Rotor):
     """Class for the enigma interface"""
 
-    def __init__(self, rotorId, seedLetter):
+    def __init__(self, rotorId, seed, initialLetter):
 
-        super().__init__(rotorId, seedLetter)
+        super().__init__(rotorId, seed, initialLetter)
 
     def build(self):
         """Method for building an interface rotor"""
 
         # Build the skeleton interface
-        rotor, seedLetterIndex, letters, positions = self.buildSkeleton()
+        rotor, letters, positions = self.buildSkeleton()
 
         # For the interface, output position is the same as input position
         rotor["outputPosition"] = rotor["position"]
@@ -260,18 +266,18 @@ class Interface(Rotor):
 class Reflector(Rotor):
     """Class for enigma reflector"""
 
-    def __init__(self, rotorId, seedLetter):
+    def __init__(self, rotorId, seed, initialLetter):
 
-        super().__init__(rotorId, seedLetter)
+        super().__init__(rotorId, seed, initialLetter)
 
     def build(self):
         """Method for building a reflector rotor"""
 
         # Build the skeleton reflector
-        rotor, seedLetterIndex, letters, positions = self.buildSkeleton()
+        rotor, letters, positions = self.buildSkeleton()
 
         # Set seed of the randomiser
-        seed(seedLetterIndex)
+        seed(self.seed)
 
         # For the reflector, inputs and outputs need to be paired together
         chosenLetters = []
@@ -288,19 +294,19 @@ class Reflector(Rotor):
 class Switchboard(Rotor):
     """Class for enigma switchboard"""
 
-    def __init__(self, rotorId, seedLetter, numberOfPairs):
+    def __init__(self, rotorId, seed, initialLetter, numberOfPairs):
 
-        super().__init__(rotorId, seedLetter)
+        super().__init__(rotorId, seed, initialLetter)
         self.numberOfPairs = numberOfPairs
 
     def build(self):
         """Method for building a switchboard"""
 
         # Build the skeleton switchboard
-        rotor, seedLetterIndex, letters, positions = self.buildSkeleton()
+        rotor, letters, positions = self.buildSkeleton()
 
         # Set seed of the randomiser
-        seed(seedLetterIndex)
+        seed(self.seed)
 
         # For the switchboard we create up to 10 pairs of letters whilst the others remain unaffected
 
@@ -339,18 +345,18 @@ class Switchboard(Rotor):
 
 
 # Define rotors configurations
-interface = Interface(0, "A")
+interface = Interface(0, 0, "A")
 
-switchboard = Switchboard(0, "F", 10)
+switchboard = Switchboard(0, 0, "A", 10)
 
-rotor1 = Rotor(1, "B")
-rotor2 = Rotor(2, "Q")
-rotor3 = Rotor(3, "J")
-rotor4 = Rotor(4, "V")
-rotor5 = Rotor(5, "A")
+rotor1 = Rotor(1, 15, "B")
+rotor2 = Rotor(2, 203, "Q")
+rotor3 = Rotor(3, 2, "J")
+rotor4 = Rotor(4, 59, "V")
+rotor5 = Rotor(5, 245, "A")
 
-reflector1 = Reflector(1, "C")
-reflector2 = Reflector(2, "K")
+reflector1 = Reflector(1, 13, "C")
+reflector2 = Reflector(2, 98, "K")
 
 # Build dictionaries
 rotorDict = {
@@ -374,21 +380,21 @@ reflectorDict = {
 if __name__ == "__main__":
 
     # Test interface
-    interface = Interface(0, "A")
+    interface = Interface(0, 0, "A")
     interface.build()
     print(interface.data)
 
     # Test switchboard
-    switchboard = Switchboard(0, "A", 10)
+    switchboard = Switchboard(0, 2, "A", 10)
     switchboard.build()
     print(switchboard.data)
 
     # Test rotor
-    rotor = Rotor(1, "G")
+    rotor = Rotor(1, 12, "G")
     rotor.build()
     print(rotor.data)
 
     # Test reflector
-    reflector = Reflector(1, "D")
+    reflector = Reflector(1, 86, "D")
     reflector.build()
     print(reflector.data)

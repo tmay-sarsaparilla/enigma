@@ -89,7 +89,7 @@ def encrypt(
 
 if __name__ == "__main__":
 
-    inputMessage = "Hello World!"
+    inputMessage = "VCIUS FKIMX"
 
     reflectorId = 1
 
