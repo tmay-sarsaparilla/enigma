@@ -2,7 +2,7 @@
 
 from string import ascii_uppercase
 import pandas as pd
-from random import choice, sample, seed
+from random import choice, seed
 
 
 class Rotor:
@@ -18,6 +18,13 @@ class Rotor:
         self.data = None
         self.rotations = 0
         self.period_of_rotation = 0
+
+    def reset(self):
+        """Method for resetting a rotor to it's initial state"""
+
+        # Reset data and rotations
+        self.data = None
+        self.rotations = 0
 
     def set_initial_letter(self, initial_letter):
         """Method for setting the initial letter of a rotor"""
@@ -299,10 +306,17 @@ class Switchboard(Rotor):
 
     rotor_type = "switchboard"
 
-    def __init__(self, rotor_id, seed, initial_letter, number_of_pairs):
+    def __init__(self, rotor_id, seed, initial_letter):
 
         super().__init__(rotor_id, seed, initial_letter)
-        self.numberOfPairs = number_of_pairs
+        self.pairs = []
+
+    def assign_pairs(self, pairs):
+        """Method for assigning pairs of letters to the switchboard"""
+
+        self.pairs = pairs
+
+        return
 
     def build(self):
         """Method for building a switchboard"""
@@ -310,38 +324,26 @@ class Switchboard(Rotor):
         # Build the skeleton switchboard
         rotor, letters, positions = self.build_skeleton()
 
-        # Set seed of the randomiser
-        seed(self.seed)
+        # Set the output position equal to the input position
+        rotor["output_position"] = rotor["position"]
 
-        # For the switchboard we create up to 10 pairs of letters whilst the others remain unaffected
+        # Check if there are pairs assigned to the switchboard
+        if len(self.pairs) > 0:
 
-        # Get the total number of pairs (maximum is 10)
-        number_of_pairs = max(self.numberOfPairs, 10)
+            # Loop through the pairs
+            for i in self.pairs:
 
-        # If this number is negative, raise an error
-        if number_of_pairs < 0:
+                # Extract the letters in the pair
+                first_letter = i[0]
+                second_letter = i[1]
 
-            raise ValueError("Number of switchboard pairs cannot be negative")
+                # Find the position of the letters in the switchboard
+                first_position = rotor.loc[first_letter, "position"]
+                second_position = rotor.loc[second_letter, "position"]
 
-        # Select the letters which won't be affected
-        number_unaffected = 26 - number_of_pairs * 2
-
-        chosen_letters = sample(letters, k=number_unaffected)
-
-        # These letters should have the same input and output positions
-        for i in chosen_letters:
-
-            # Find the letter position
-            position = rotor.loc[i, "position"]
-
-            # Set as the output position
-            rotor.loc[i, "output_position"] = position
-
-            # Remove from list of possible positions
-            positions.remove(position)
-
-        # Then we pair up the others
-        rotor = self.pair_letters(rotor=rotor, letters=letters, positions=positions, chosen_letters=chosen_letters)
+                # Pair up the letters
+                rotor.loc[first_letter, "output_position"] = second_position
+                rotor.loc[second_letter, "output_position"] = first_position
 
         # Assign the rotor data to the object
         self.data = rotor
@@ -352,7 +354,7 @@ class Switchboard(Rotor):
 # Define rotors configurations
 interface = Interface(0, 0, "A")
 
-switchboard = Switchboard(0, 0, "A", 10)
+switchboard = Switchboard(0, 0, "A")
 
 rotor1 = Rotor(1, 15, "B")
 rotor2 = Rotor(2, 203, "Q")
@@ -364,7 +366,7 @@ reflector1 = Reflector(1, 13, "C")
 reflector2 = Reflector(2, 98, "K")
 
 # Build dictionaries
-rotorDict = {
+rotor_dict = {
 
     1: rotor1,
     2: rotor2,
@@ -374,7 +376,7 @@ rotorDict = {
 
 }
 
-reflectorDict = {
+reflector_dict = {
 
     1: reflector1,
     2: reflector2
@@ -390,7 +392,9 @@ if __name__ == "__main__":
     print(interface.data)
 
     # Test switchboard
-    switchboard = Switchboard(0, 2, "A", 10)
+    switchboard = Switchboard(0, 2, "A")
+    switchboard_pairs = [("A", "B")]
+    switchboard.assign_pairs(switchboard_pairs)
     switchboard.build()
     print(switchboard.data)
 

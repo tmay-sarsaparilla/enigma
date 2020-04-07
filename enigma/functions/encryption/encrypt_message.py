@@ -1,6 +1,7 @@
 """Module to encrypt a message"""
 from enigma.functions.encryption.encrypt_letter import encrypt_letter
 from enigma.functions.rotors.construct_rotors import construct_rotors
+from enigma.functions.rotors.reset_rotors import reset_rotors
 from string import punctuation, whitespace
 from textwrap import wrap
 
@@ -52,6 +53,11 @@ def encrypt(input_message, config):
         letter = message_letters[i]
         letter_index = i
 
+        # TODO Fix bug in rotor rotation
+        print(letter)
+        print(letter_index)
+        print(left_rotor.rotations)
+
         # Encrypt the letter
         output_letter = encrypt_letter(
                                       input_letter=letter,
@@ -73,6 +79,16 @@ def encrypt(input_message, config):
     # Collapse into single string with spaces between chunks
     encrypted_message = " ".join(encrypted_list)
 
+    # Reset the machine
+    reset_rotors(
+                 interface=interface,
+                 switchboard=switchboard,
+                 left_rotor=left_rotor,
+                 middle_rotor=middle_rotor,
+                 right_rotor=right_rotor,
+                 reflector=reflector
+                 )
+
     return encrypted_message
 
 
@@ -80,8 +96,12 @@ if __name__ == "__main__":
 
     from enigma.functions.config.default_config import config
 
-    inputMessage = "FPHQI UYTYW VUFBV HPGOV SXFMY PZO"
+    inputMessage = "XLPOZ GNGND JFKO"
 
     encryptedMessage = encrypt(input_message=inputMessage, config=config)
 
     print(encryptedMessage)
+
+    unencryptedMessage = encrypt(input_message=encryptedMessage, config=config)
+
+    print(unencryptedMessage)

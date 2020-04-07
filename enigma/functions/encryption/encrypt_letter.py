@@ -1,5 +1,4 @@
 """Module for encrypting a single letter"""
-from enigma.functions.encryption.__init__ import *
 
 
 def encrypt_letter(
@@ -69,6 +68,7 @@ def encrypt_letter(
 if __name__ == "__main__":
 
     from enigma.functions.config.default_config import config
+    from enigma.functions.rotors.construct_rotors import construct_rotors
 
     (
         interface,
