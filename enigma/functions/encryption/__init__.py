@@ -1,3 +1,3 @@
 """Initialisation for encryption package"""
 
-from enigma.functions.rotors.constructRotors import *
+from enigma.functions.rotors.construct_rotors import *

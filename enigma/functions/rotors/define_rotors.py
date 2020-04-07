@@ -8,33 +8,32 @@ from random import choice, sample, seed
 class Rotor:
     """Class for an enigma machine rotor"""
 
-    rotorType = "rotor"
-    # TODO Add rotorType to other rotor types
+    rotor_type = "rotor"
 
-    def __init__(self, rotorId, seed, initialLetter):
+    def __init__(self, rotor_id, seed, initial_letter):
 
-        self.id = rotorId
+        self.id = rotor_id
         self.seed = seed
-        self.initialLetter = initialLetter
+        self.initial_letter = initial_letter
         self.data = None
         self.rotations = 0
-        self.periodOfRotation = 0
+        self.period_of_rotation = 0
 
-    def setInitialLetter(self, initialLetter):
+    def set_initial_letter(self, initial_letter):
         """Method for setting the initial letter of a rotor"""
 
-        self.initialLetter = initialLetter
+        self.initial_letter = initial_letter
 
         return
 
-    def setPeriodOfRotation(self, periodOfRotation):
+    def set_period_of_rotation(self, period_of_rotation):
         """Method for setting the period of rotation of a rotor"""
 
-        self.periodOfRotation = periodOfRotation
+        self.period_of_rotation = period_of_rotation
 
         return
 
-    def buildSkeleton(self):
+    def build_skeleton(self):
         """Method for building a rotor skeleton"""
 
         # Get list of all ASCII uppercase letters and list of possible positions
@@ -43,52 +42,52 @@ class Rotor:
 
         # Build empty rotor table
         rotor = pd.DataFrame(
-            columns=["letter", "position", "outputPosition"],
+            columns=["letter", "position", "output_position"],
             index=letters
         )
 
         # Get index of seed letter in list
-        initialLetterIndex = letters.index(self.initialLetter)
+        initial_letter_index = letters.index(self.initial_letter)
 
         # Populate the letters column
         rotor["letter"] = letters
         # Populate the position column such that the seed letter is at position 0
-        rotor["position"] = [(i - initialLetterIndex) % 26 for i in positions]
+        rotor["position"] = [(i - initial_letter_index) % 26 for i in positions]
 
         return rotor, letters, positions
 
-    def pairLetters(self, rotor, letters, positions, chosenLetters):
+    def pair_letters(self, rotor, letters, positions, chosen_letters):
         """Method for pairing letters together"""
 
         # Loop through each letter
         for i in letters:
 
             # If an output position has already been assigned, skip the letter
-            if i in chosenLetters:
+            if i in chosen_letters:
 
                 continue
 
             # Find position of letter
-            inputPosition = rotor.loc[i, "position"]
+            input_position = rotor.loc[i, "position"]
 
             # Randomly choose a position from the list (which is not the input position)
-            outputPosition = choice([e for e in positions if e != inputPosition])
+            output_position = choice([e for e in positions if e != input_position])
 
             # Assign position to letter
-            rotor.loc[i, "outputPosition"] = outputPosition
+            rotor.loc[i, "output_position"] = output_position
 
             # Find the corresponding letter and complete the loop
-            outputLetter = rotor[rotor["position"] == outputPosition].iloc[0]["letter"]
+            outputLetter = rotor[rotor["position"] == output_position].iloc[0]["letter"]
 
-            rotor.loc[outputLetter, "outputPosition"] = inputPosition
+            rotor.loc[outputLetter, "output_position"] = input_position
 
             # Add both letters to the chosen letters list
-            chosenLetters.append(i)
-            chosenLetters.append(outputLetter)
+            chosen_letters.append(i)
+            chosen_letters.append(outputLetter)
 
             # Remove both input and output positions from possible choices
-            positions.remove(inputPosition)
-            positions.remove(outputPosition)
+            positions.remove(input_position)
+            positions.remove(output_position)
 
         return rotor
 
@@ -96,7 +95,7 @@ class Rotor:
         """Method for building a rotor"""
 
         # Build the skeleton rotor
-        rotor, letters, positions = self.buildSkeleton()
+        rotor, letters, positions = self.build_skeleton()
 
         # Set seed of the randomiser
         seed(self.seed)
@@ -105,74 +104,74 @@ class Rotor:
         for i in letters:
 
             # Randomly choose a position from the list
-            outputPosition = choice(positions)
+            output_position = choice(positions)
 
             # Assign position to letter
-            rotor.loc[i, "outputPosition"] = outputPosition
+            rotor.loc[i, "output_position"] = output_position
 
             # Remove position from possible choices
-            positions.remove(outputPosition)
+            positions.remove(output_position)
 
         # Assign the rotor data to the object
         self.data = rotor
 
         return
 
-    def getPositionFromLetter(self, letter):
+    def get_position_from_letter(self, letter):
         """Method to retrieve the position of a letter in a given rotor"""
 
         position = self.data.loc[letter, "position"]
 
         return position
 
-    def getLetterFromPosition(self, position):
+    def get_letter_from_position(self, position):
         """Method to retrieve the letter of a position in a given rotor"""
 
         letter = self.data[self.data["position"] == position].iloc[0]["letter"]
 
         return letter
 
-    def getOutputPositionFromInputPosition(self, position):
+    def get_output_position_from_input_position(self, position):
         """Method to retrieve output position of a given rotor from a given input position"""
 
-        letter = self.getLetterFromPosition(position=position)
+        letter = self.get_letter_from_position(position=position)
 
-        outputPosition = self.data.loc[letter, "outputPosition"]
+        output_position = self.data.loc[letter, "output_position"]
 
-        return outputPosition
+        return output_position
 
-    def getLetterFromOutputPosition(self, outputPosition):
+    def get_letter_from_output_position(self, output_position):
         """Method to retrieve letter of a given rotor from a given output position"""
 
-        letter = self.data[self.data["outputPosition"] == outputPosition].iloc[0]["letter"]
+        letter = self.data[self.data["output_position"] == output_position].iloc[0]["letter"]
 
         return letter
 
-    def getInputPositionFromOutputPosition(self, outputPosition):
+    def get_input_position_from_output_position(self, output_position):
         """Method to retrieve input position of a given rotor from a given output position"""
 
-        letter = self.getLetterFromOutputPosition(outputPosition=outputPosition)
+        letter = self.get_letter_from_output_position(output_position=output_position)
 
-        position = self.getPositionFromLetter(letter=letter)
+        position = self.get_position_from_letter(letter=letter)
 
         return position
 
-    def shouldRotate(self, letterIndex):
+    def should_rotate(self, letter_index):
         """Method for determining whether a rotor should rotate given an index and period"""
 
-        shouldRotate = False
+        should_rotate = False
 
         # If it's the first letter, don't rotate
-        if letterIndex == 0:
+        if letter_index == 0:
 
-            return shouldRotate
+            return should_rotate
 
         # If the index is a multiple of the rotation, then rotate
-        if letterIndex % self.periodOfRotation == 0:
+        if letter_index % self.period_of_rotation == 0:
 
-            shouldRotate = True
+            should_rotate = True
 
-        return shouldRotate
+        return should_rotate
 
     def rotate(self):
         """Method to rotate a rotor"""
@@ -182,24 +181,24 @@ class Rotor:
 
         return
 
-    def applyRotation(self, letterIndex):
+    def apply_rotation(self, letter_index):
         """Method to apply rotation to a rotor if necessary"""
 
         # Check if the rotor should be rotated
-        if self.shouldRotate(letterIndex=letterIndex):
+        if self.should_rotate(letter_index=letter_index):
 
             # Apply rotation
             self.rotate()
 
-    def accountForRotationLeftToRight(self, position):
+    def account_for_rotation_left_to_right(self, position):
         """Method to account for rotor rotation when crossing left to right"""
 
         # Calculate the rotated position
-        rotatedPosition = (position + self.rotations) % 26
+        rotated_position = (position + self.rotations) % 26
 
-        return rotatedPosition
+        return rotated_position
 
-    def accountForRotationRightToLeft(self, position):
+    def account_for_rotation_right_to_left(self, position):
         """Method to account for rotor rotation when crossing right to left"""
 
         # If the rotor has completed a full rotation, add 26 to avoid negative positions
@@ -208,54 +207,56 @@ class Rotor:
             position += 26
 
         # Calculate the rotated position
-        rotatedPosition = (position - self.rotations) % 26
+        rotated_position = (position - self.rotations) % 26
 
-        return rotatedPosition
+        return rotated_position
 
-    def crossLeftToRight(self, inputPosition):
+    def cross_left_to_right(self, input_position):
         """Method to pass a letter across a rotor from left to right"""
 
         # Apply rotations to the input position
-        rotatedInputPosition = self.accountForRotationLeftToRight(inputPosition)
+        rotated_input_position = self.account_for_rotation_left_to_right(input_position)
 
         # Get the output position
-        outputPosition = self.getOutputPositionFromInputPosition(rotatedInputPosition)
+        output_position = self.get_output_position_from_input_position(rotated_input_position)
 
         # Apply rotations to the output position
-        rotatedOutputPosition = self.accountForRotationLeftToRight(outputPosition)
+        rotated_output_position = self.account_for_rotation_left_to_right(output_position)
 
-        return rotatedOutputPosition
+        return rotated_output_position
 
-    def crossRightToLeft(self, outputPosition):
+    def cross_right_to_left(self, output_position):
         """Method to pass a letter across a rotor from right to left"""
 
         # Apply rotations to the output position
-        rotatedOutputPosition = self.accountForRotationRightToLeft(outputPosition)
+        rotated_output_position = self.account_for_rotation_right_to_left(output_position)
 
         # Get the input position
-        inputPosition = self.getInputPositionFromOutputPosition(rotatedOutputPosition)
+        input_position = self.get_input_position_from_output_position(rotated_output_position)
 
         # Apply rotations to the input position
-        rotatedInputPosition = self.accountForRotationRightToLeft(inputPosition)
+        rotated_input_position = self.account_for_rotation_right_to_left(input_position)
 
-        return rotatedInputPosition
+        return rotated_input_position
 
 
 class Interface(Rotor):
     """Class for the enigma interface"""
 
-    def __init__(self, rotorId, seed, initialLetter):
+    rotor_type = "interface"
 
-        super().__init__(rotorId, seed, initialLetter)
+    def __init__(self, rotor_id, seed, initial_letter):
+
+        super().__init__(rotor_id, seed, initial_letter)
 
     def build(self):
         """Method for building an interface rotor"""
 
         # Build the skeleton interface
-        rotor, letters, positions = self.buildSkeleton()
+        rotor, letters, positions = self.build_skeleton()
 
         # For the interface, output position is the same as input position
-        rotor["outputPosition"] = rotor["position"]
+        rotor["output_position"] = rotor["position"]
 
         # Assign the rotor data to the object
         self.data = rotor
@@ -266,24 +267,26 @@ class Interface(Rotor):
 class Reflector(Rotor):
     """Class for enigma reflector"""
 
-    def __init__(self, rotorId, seed, initialLetter):
+    rotor_type = "reflector"
 
-        super().__init__(rotorId, seed, initialLetter)
+    def __init__(self, rotor_id, seed, initial_letter):
+
+        super().__init__(rotor_id, seed, initial_letter)
 
     def build(self):
         """Method for building a reflector rotor"""
 
         # Build the skeleton reflector
-        rotor, letters, positions = self.buildSkeleton()
+        rotor, letters, positions = self.build_skeleton()
 
         # Set seed of the randomiser
         seed(self.seed)
 
         # For the reflector, inputs and outputs need to be paired together
-        chosenLetters = []
+        chosen_letters = []
 
         # Pair letters together
-        rotor = self.pairLetters(rotor=rotor, letters=letters, positions=positions, chosenLetters=chosenLetters)
+        rotor = self.pair_letters(rotor=rotor, letters=letters, positions=positions, chosen_letters=chosen_letters)
 
         # Assign the rotor data to the object
         self.data = rotor
@@ -294,16 +297,18 @@ class Reflector(Rotor):
 class Switchboard(Rotor):
     """Class for enigma switchboard"""
 
-    def __init__(self, rotorId, seed, initialLetter, numberOfPairs):
+    rotor_type = "switchboard"
 
-        super().__init__(rotorId, seed, initialLetter)
-        self.numberOfPairs = numberOfPairs
+    def __init__(self, rotor_id, seed, initial_letter, number_of_pairs):
+
+        super().__init__(rotor_id, seed, initial_letter)
+        self.numberOfPairs = number_of_pairs
 
     def build(self):
         """Method for building a switchboard"""
 
         # Build the skeleton switchboard
-        rotor, letters, positions = self.buildSkeleton()
+        rotor, letters, positions = self.build_skeleton()
 
         # Set seed of the randomiser
         seed(self.seed)
@@ -311,32 +316,32 @@ class Switchboard(Rotor):
         # For the switchboard we create up to 10 pairs of letters whilst the others remain unaffected
 
         # Get the total number of pairs (maximum is 10)
-        numberOfPairs = max(self.numberOfPairs, 10)
+        number_of_pairs = max(self.numberOfPairs, 10)
 
         # If this number is negative, raise an error
-        if numberOfPairs < 0:
+        if number_of_pairs < 0:
 
             raise ValueError("Number of switchboard pairs cannot be negative")
 
         # Select the letters which won't be affected
-        numberUnaffected = 26 - numberOfPairs * 2
+        number_unaffected = 26 - number_of_pairs * 2
 
-        chosenLetters = sample(letters, k=numberUnaffected)
+        chosen_letters = sample(letters, k=number_unaffected)
 
         # These letters should have the same input and output positions
-        for i in chosenLetters:
+        for i in chosen_letters:
 
             # Find the letter position
             position = rotor.loc[i, "position"]
 
             # Set as the output position
-            rotor.loc[i, "outputPosition"] = position
+            rotor.loc[i, "output_position"] = position
 
             # Remove from list of possible positions
             positions.remove(position)
 
         # Then we pair up the others
-        rotor = self.pairLetters(rotor=rotor, letters=letters, positions=positions, chosenLetters=chosenLetters)
+        rotor = self.pair_letters(rotor=rotor, letters=letters, positions=positions, chosen_letters=chosen_letters)
 
         # Assign the rotor data to the object
         self.data = rotor
