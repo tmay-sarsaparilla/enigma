@@ -1,6 +1,6 @@
 """Module for constructing rotors"""
 
-from enigma.functions.rotors.define_rotors import interface, switchboard, rotorDict, reflectorDict
+from enigma.functions.rotors.rotor_configurations import interface, switchboard, rotor_dict, reflector_dict
 from enigma.functions.config.extract_config import extract_config
 
 
@@ -13,10 +13,11 @@ def construct_interface():
     return interface
 
 
-def construct_switchboard():
+def construct_switchboard(switchboard_pairs):
     """Function to construct the switchboard"""
 
-    # TODO Find a way to make switchboard pairs configurable
+    # Set the switchboard pairs
+    switchboard.assign_pairs(switchboard_pairs)
 
     # Build the switchboard
     switchboard.build()
@@ -30,17 +31,17 @@ def construct_rotor_from_id(rotor_id, initial_letter):
     # Get the config for the requested rotor
     try:
 
-        rotor = rotorDict[rotor_id]
+        rotor = rotor_dict[rotor_id]
 
     except KeyError:
 
         raise ValueError("Invalid rotor id")
 
-    # Build the rotor
-    rotor.build()
-
     # Set the initial letter
     rotor.set_initial_letter(initial_letter=initial_letter)
+
+    # Build the rotor
+    rotor.build()
 
     return rotor
 
@@ -51,7 +52,7 @@ def construct_reflector_from_id(reflector_id):
     # Get the config for the requested reflector
     try:
 
-        reflector = reflectorDict[reflector_id]
+        reflector = reflector_dict[reflector_id]
 
     except KeyError:
 
@@ -67,6 +68,7 @@ def construct_rotors(config):
     """Function for constructing a given set of rotors"""
 
     (
+        switchboard_pairs,
         left_rotor_id,
         left_rotor_initial_letter,
         middle_rotor_id,
@@ -80,7 +82,7 @@ def construct_rotors(config):
     interface = construct_interface()
 
     # Build the switchboard
-    switchboard = construct_switchboard()
+    switchboard = construct_switchboard(switchboard_pairs=switchboard_pairs)
 
     # Build all requested rotors
     left_rotor = construct_rotor_from_id(rotor_id=left_rotor_id, initial_letter=left_rotor_initial_letter)
@@ -96,3 +98,25 @@ def construct_rotors(config):
     reflector = construct_reflector_from_id(reflector_id=reflector_id)
 
     return interface, switchboard, left_rotor, middle_rotor, right_rotor, reflector
+
+
+if __name__ == "__main__":
+
+    from enigma.functions.config.default_config import config
+
+    (
+        interface_test,
+        switchboard_test,
+        left_rotor_test,
+        middle_rotor_test,
+        right_rotor_test,
+        reflector_test
+    ) = construct_rotors(config=config)
+
+    print(config)
+    print(interface_test.data)
+    print(switchboard.data)
+    print(left_rotor_test.data)
+    print(middle_rotor_test.data)
+    print(right_rotor_test.data)
+    print(reflector_test.data)

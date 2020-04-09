@@ -4,6 +4,9 @@
 def extract_config(config):
     """Function to deconstruct config into individual variables"""
 
+    # Extract the switchboard pairs
+    switchboard_pairs = config["switchboard_pairs"]
+
     # Extract the left rotor
     left_rotor = config["left_rotor"]
 
@@ -28,6 +31,7 @@ def extract_config(config):
     reflector_id = reflector["id"]
 
     return \
+        switchboard_pairs, \
         left_rotor_id, \
         left_rotor_initial_letter, \
         middle_rotor_id, \
@@ -39,45 +43,12 @@ def extract_config(config):
 
 if __name__ == "__main__":
 
-    left_rotor = {
-
-        "id": 1,
-        "initial_letter": "A"
-
-    }
-
-    middle_rotor = {
-
-        "id": 1,
-        "initial_letter": "A"
-
-    }
-
-    right_rotor = {
-
-        "id": 1,
-        "initial_letter": "A"
-
-    }
-
-    reflector = {
-
-        "id": 1
-
-    }
-
-    config = {
-
-        "left_rotor": left_rotor,
-        "middle_rotor": middle_rotor,
-        "right_rotor": right_rotor,
-        "reflector": reflector
-
-    }
+    from enigma.functions.config.default_config import config
 
     print(config)
 
     (
+        switchboard_pairs,
         left_rotor_id,
         left_rotor_initial_letter,
         middle_rotor_id,
@@ -87,6 +58,7 @@ if __name__ == "__main__":
         reflector_id
     ) = extract_config(config)
 
+    print(switchboard_pairs)
     print(left_rotor_id)
     print(left_rotor_initial_letter)
     print(middle_rotor_id)

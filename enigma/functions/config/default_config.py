@@ -1,5 +1,15 @@
 """Module containing a default config for the machine"""
 
+switchboard_pairs = [
+
+    ("B", "J"),
+    ("K", "D"),
+    ("A", "P"),
+    ("Q", "F"),
+    ("T", "S")
+
+]
+
 left_rotor = {
 
     "id": 1,
@@ -32,6 +42,7 @@ config = {
     "left_rotor": left_rotor,
     "middle_rotor": middle_rotor,
     "right_rotor": right_rotor,
-    "reflector": reflector
+    "reflector": reflector,
+    "switchboard_pairs": switchboard_pairs
 
 }
