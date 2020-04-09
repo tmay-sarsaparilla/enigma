@@ -43,9 +43,9 @@ def extract_config(config):
 
 if __name__ == "__main__":
 
-    from enigma.functions.config.default_config import config
+    from enigma.functions.config.default_config import default_config
 
-    print(config)
+    print(default_config)
 
     (
         switchboard_pairs,
@@ -56,7 +56,7 @@ if __name__ == "__main__":
         right_rotor_id,
         right_rotor_initial_letter,
         reflector_id
-    ) = extract_config(config)
+    ) = extract_config(default_config)
 
     print(switchboard_pairs)
     print(left_rotor_id)

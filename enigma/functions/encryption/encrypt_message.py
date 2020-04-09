@@ -89,14 +89,14 @@ def encrypt(input_message, config):
 
 if __name__ == "__main__":
 
-    from enigma.functions.config.default_config import config
+    from enigma.functions.config.default_config import default_config
 
     inputMessage = "Yes I have"
 
-    encryptedMessage = encrypt(input_message=inputMessage, config=config)
+    encryptedMessage = encrypt(input_message=inputMessage, config=default_config)
 
     print(encryptedMessage)
 
-    unencryptedMessage = encrypt(input_message=encryptedMessage, config=config)
+    unencryptedMessage = encrypt(input_message=encryptedMessage, config=default_config)
 
     print(unencryptedMessage)

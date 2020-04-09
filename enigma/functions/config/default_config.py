@@ -37,7 +37,7 @@ reflector = {
 
 }
 
-config = {
+default_config = {
 
     "left_rotor": left_rotor,
     "middle_rotor": middle_rotor,

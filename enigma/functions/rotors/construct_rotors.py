@@ -102,7 +102,7 @@ def construct_rotors(config):
 
 if __name__ == "__main__":
 
-    from enigma.functions.config.default_config import config
+    from enigma.functions.config.default_config import default_config
 
     (
         interface_test,
@@ -111,9 +111,9 @@ if __name__ == "__main__":
         middle_rotor_test,
         right_rotor_test,
         reflector_test
-    ) = construct_rotors(config=config)
+    ) = construct_rotors(config=default_config)
 
-    print(config)
+    print(default_config)
     print(interface_test.data)
     print(switchboard.data)
     print(left_rotor_test.data)
