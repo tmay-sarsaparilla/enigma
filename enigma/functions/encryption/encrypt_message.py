@@ -53,11 +53,6 @@ def encrypt(input_message, config):
         letter = message_letters[i]
         letter_index = i
 
-        # TODO Fix bug in rotor rotation
-        print(letter)
-        print(letter_index)
-        print(left_rotor.rotations)
-
         # Encrypt the letter
         output_letter = encrypt_letter(
                                       input_letter=letter,
@@ -96,7 +91,7 @@ if __name__ == "__main__":
 
     from enigma.functions.config.default_config import config
 
-    inputMessage = "XLPOZ GNGND JFKO"
+    inputMessage = "Yes I have"
 
     encryptedMessage = encrypt(input_message=inputMessage, config=config)
 

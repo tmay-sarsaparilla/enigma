@@ -1,6 +1,6 @@
 """Module for constructing rotors"""
 
-from enigma.functions.rotors.define_rotors import interface, switchboard, rotor_dict, reflector_dict
+from enigma.functions.rotors.rotor_configurations import interface, switchboard, rotor_dict, reflector_dict
 from enigma.functions.config.extract_config import extract_config
 
 
@@ -105,18 +105,18 @@ if __name__ == "__main__":
     from enigma.functions.config.default_config import config
 
     (
-        interface,
-        switchboard,
-        left_rotor,
-        middle_rotor,
-        right_rotor,
-        reflector
+        interface_test,
+        switchboard_test,
+        left_rotor_test,
+        middle_rotor_test,
+        right_rotor_test,
+        reflector_test
     ) = construct_rotors(config=config)
 
     print(config)
-    print(interface.data)
+    print(interface_test.data)
     print(switchboard.data)
-    print(left_rotor.data)
-    print(middle_rotor.data)
-    print(right_rotor.data)
-    print(reflector.data)
+    print(left_rotor_test.data)
+    print(middle_rotor_test.data)
+    print(right_rotor_test.data)
+    print(reflector_test.data)

@@ -25,6 +25,7 @@ class Rotor:
         # Reset data and rotations
         self.data = None
         self.rotations = 0
+        self.period_of_rotation = 0
 
     def set_initial_letter(self, initial_letter):
         """Method for setting the initial letter of a rotor"""
@@ -351,59 +352,26 @@ class Switchboard(Rotor):
         return
 
 
-# Define rotors configurations
-interface = Interface(0, 0, "A")
-
-switchboard = Switchboard(0, 0, "A")
-
-rotor1 = Rotor(1, 15, "B")
-rotor2 = Rotor(2, 203, "Q")
-rotor3 = Rotor(3, 2, "J")
-rotor4 = Rotor(4, 59, "V")
-rotor5 = Rotor(5, 245, "A")
-
-reflector1 = Reflector(1, 13, "C")
-reflector2 = Reflector(2, 98, "K")
-
-# Build dictionaries
-rotor_dict = {
-
-    1: rotor1,
-    2: rotor2,
-    3: rotor3,
-    4: rotor4,
-    5: rotor5
-
-}
-
-reflector_dict = {
-
-    1: reflector1,
-    2: reflector2
-
-}
-
-
 if __name__ == "__main__":
 
     # Test interface
-    interface = Interface(0, 0, "A")
-    interface.build()
-    print(interface.data)
+    interface_test = Interface(0, 0, "A")
+    interface_test.build()
+    print(interface_test.data)
 
     # Test switchboard
-    switchboard = Switchboard(0, 2, "A")
+    switchboard_test = Switchboard(0, 2, "A")
     switchboard_pairs = [("A", "B")]
-    switchboard.assign_pairs(switchboard_pairs)
-    switchboard.build()
-    print(switchboard.data)
+    switchboard_test.assign_pairs(switchboard_pairs)
+    switchboard_test.build()
+    print(switchboard_test.data)
 
     # Test rotor
-    rotor = Rotor(1, 12, "G")
-    rotor.build()
-    print(rotor.data)
+    rotor_test = Rotor(1, 12, "G")
+    rotor_test.build()
+    print(rotor_test.data)
 
     # Test reflector
-    reflector = Reflector(1, 86, "D")
-    reflector.build()
-    print(reflector.data)
+    reflector_test = Reflector(1, 86, "D")
+    reflector_test.build()
+    print(reflector_test.data)
