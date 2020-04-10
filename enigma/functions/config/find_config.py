@@ -1,14 +1,17 @@
 """Module for finding config files and directory"""
 
-from re import search
 from os import path
+import enigma
 
 
 def get_path_of_user_config_directory():
+    """Function for retrieving the path of the user_configs directory"""
 
     # TODO Get this function to work properly
 
-    dir_path = path.expanduser("~\\enigma_user_configs\\")
+    top_level_path = enigma.__file__
+
+    dir_path = top_level_path.replace("__init__.py", "user_configs\\")
 
     return dir_path
 
@@ -26,6 +29,8 @@ if __name__ == "__main__":
     dir_path_test = get_path_of_user_config_directory()
 
     print(dir_path_test)
+
+    print(path.isdir(dir_path_test))
 
     file_path_test = get_path_from_file_name("test", dir_path_test)
 

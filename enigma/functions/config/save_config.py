@@ -27,7 +27,7 @@ def choose_file_name():
 
     # Ask user to choose a file name
     file_name = prompt_user_for_input(
-                                      prompt="Choose a name for the config: ",
+                                      prompt="\nChoose a name for the config: ",
                                       valid_selections=[],
                                       invalid_selection_message="Invalid name. Please use only letters and numbers"
                                       )

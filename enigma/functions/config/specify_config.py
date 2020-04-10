@@ -138,7 +138,7 @@ def choose_reflector(valid_selections):
 
     # Ask user to choose a rotor
     reflector_choice = prompt_user_for_input(
-        prompt=f"Choose a reflector: ",
+        prompt=f"\nChoose a reflector: ",
         valid_selections=valid_selections,
         invalid_selection_message="Invalid selection. Please choose from the available reflectors"
     )

@@ -5,3 +5,4 @@ from enigma.functions.config.load_config import load_config, get_saved_config_li
 from enigma.functions.config.specify_config import specify_config, prompt_user_for_input
 from enigma.functions.encryption.encrypt_message import encrypt
 from enigma.functions.config.default_config import default_config
+from enigma.functions.config.delete_config import delete_config

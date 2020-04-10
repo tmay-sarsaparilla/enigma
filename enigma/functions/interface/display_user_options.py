@@ -5,7 +5,8 @@ from enigma.functions.interface.__init__ import specify_config, \
     load_config, \
     prompt_user_for_input, \
     get_saved_config_list, \
-    choose_file_name
+    choose_file_name, \
+    delete_config
 
 from enigma.functions.interface.encrypt_with_config import encrypt_with_config
 
@@ -35,14 +36,15 @@ def display_user_options():
                 "1.\tCreate config\n"
                 "2.\tUse saved config\n"
                 "3.\tUse default config\n"
-                "4.\tExit\n\n"
+                "4.\tDelete saved config\n"
+                "5.\tExit\n\n"
                 "Please select an option: "
               )
 
     # Ask user to choose an option
     option_choice = int(prompt_user_for_input(
                                           prompt=prompt,
-                                          valid_selections=["1", "2", "3", "4"],
+                                          valid_selections=["1", "2", "3", "4", "5"],
                                           invalid_selection_message="Invalid selection. "
                                                                     "Please select an option from the list"
                                           ))
@@ -109,7 +111,50 @@ def display_user_options():
         # Print exit message
         print("\nGoodbye")
 
+    # If delete saved config selected, have user choose a config to be deleted
     if option_choice == 4:
+
+        saved_config_list = get_saved_config_list()
+
+        if len(saved_config_list) == 0:
+
+            print("\nThere are no saved configs to delete\n")
+
+            display_user_options()
+
+        else:
+
+            # Display saved configs
+            display_saved_configs(saved_config_list)
+            print("To cancel deletion, enter: cancel!")
+
+            # Convert to upper case
+            valid_config_selections = [i.upper() for i in saved_config_list]
+            valid_config_selections.append("CANCEL!")
+
+            # Ask user to choose a config
+            config_choice = prompt_user_for_input(
+                                                  prompt="Select a config from the list: ",
+                                                  valid_selections=valid_config_selections,
+                                                  invalid_selection_message="Invalid selection. "
+                                                  "Please select a config name from the list"
+                                                  )
+
+            # If user cancels deletion, skip straight to displaying options
+            if config_choice == "CANCEL!":
+
+                # Display options
+                display_user_options()
+
+            else:
+
+                # Delete the chosen config
+                delete_config(file_name=config_choice)
+
+                # Display options
+                display_user_options()
+
+    if option_choice == 5:
 
         # Print exit message
         print("\nGoodbye")
