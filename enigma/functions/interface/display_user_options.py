@@ -37,7 +37,7 @@ def display_user_options():
                 "2.\tUse saved config\n"
                 "3.\tUse default config\n"
                 "4.\tDelete saved config\n"
-                "5.\tExit\n\n"
+                "5.\tQuit\n\n"
                 "Please select an option: "
               )
 
