@@ -1,7 +1,7 @@
 """Module for loading configs from file"""
 
 from pickle import load
-from os import listdir
+from os import listdir, path
 from enigma.functions.config.find_config import get_path_of_user_config_directory, get_path_from_file_name
 
 
@@ -9,6 +9,12 @@ def get_saved_config_list():
     """Function for getting a list of all saved configs"""
 
     dir_path = get_path_of_user_config_directory()
+
+    # Check whether the config directory exists
+    if not path.isdir(dir_path):
+
+        # If not, return an empty list
+        return []
 
     file_list = listdir(dir_path)
 

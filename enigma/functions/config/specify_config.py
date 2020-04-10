@@ -56,7 +56,7 @@ def specify_switchboard_pairs():
     invalid_switchboard_count_selection_message = "Invalid selection. Please select a value between 0 and 10"
 
     switchboard_pair_count = int(prompt_user_for_input(
-        prompt="Choose number of letter pairs in the switchboard (max 10): ",
+        prompt="\nChoose number of letter pairs in the switchboard (max 10): ",
         valid_selections=valid_switchboard_pair_counts,
         invalid_selection_message=invalid_switchboard_count_selection_message
     ))
@@ -68,7 +68,7 @@ def specify_switchboard_pairs():
     # Loop as many times as requested
     for i in range(0, switchboard_pair_count):
 
-        print(f"Pair {i + 1}")
+        print(f"\nPair {i + 1}")
 
         # Get users to pick first letter in the pair
         first_letter = prompt_user_for_input(
@@ -100,11 +100,11 @@ def choose_rotor(valid_selections, position):
     """Function for prompting users to choose a rotor"""
 
     # Display available rotors
-    print(f"Available rotors: {', '.join(valid_selections)}")
+    print(f"\nAvailable rotors: {', '.join(valid_selections)}")
 
     # Ask user to choose a rotor
     rotor_choice = prompt_user_for_input(
-        prompt=f"Choose a rotor for the {position} position: ",
+        prompt=f"\nChoose a rotor for the {position} position: ",
         valid_selections=valid_selections,
         invalid_selection_message="Invalid selection. Please choose from the available rotors"
     )
@@ -134,7 +134,7 @@ def choose_reflector(valid_selections):
     """Function for prompting users to choose a reflector"""
 
     # Display available rotors
-    print(f"Available reflectors: {', '.join(valid_selections)}")
+    print(f"\nAvailable reflectors: {', '.join(valid_selections)}")
 
     # Ask user to choose a rotor
     reflector_choice = prompt_user_for_input(
