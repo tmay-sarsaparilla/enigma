@@ -7,6 +7,8 @@ from enigma.functions.interface.__init__ import specify_config, \
     get_saved_config_list, \
     choose_file_name
 
+from enigma.functions.interface.encrypt_with_config import encrypt_with_config
+
 
 def display_saved_configs(saved_config_list):
 
@@ -87,14 +89,19 @@ def display_user_options():
                                                                             "Please select a config name from the list"
                                                   )
 
+            # Load the chosen config
             chosen_config = load_config(file_name=config_choice)
 
-            print(chosen_config)
+            # Begin encryption loop with the chosen config
+            encrypt_with_config(config=chosen_config)
+
+            return
 
     # If use default config selected, use the default config to encrypt
     if option_choice == 3:
 
-        pass
+        # Begin encryption loop with the default config
+        encrypt_with_config()
 
     if option_choice == 4:
 

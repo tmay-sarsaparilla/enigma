@@ -1,8 +1,4 @@
 """Main module for enigma package"""
-from enigma.__init__ import *
+from enigma.__init__ import display_user_options
 
-input_message = input("Write the message you want to encrypt: ")
-
-output_message = encrypt(input_message=input_message, config=default_config)
-
-print(output_message)
+display_user_options()
