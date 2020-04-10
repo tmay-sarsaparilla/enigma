@@ -129,4 +129,5 @@ dmypy.json
 .pyre/
 
 .idea/
-*/user_configs
+/user_configs/
+/enigma/user_configs/

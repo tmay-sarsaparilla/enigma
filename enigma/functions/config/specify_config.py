@@ -1,5 +1,6 @@
 """Module to allow users to specify their own config for the machine"""
 
+import re
 from string import ascii_uppercase
 from enigma.functions.rotors.rotor_configurations import rotor_dict, reflector_dict
 
@@ -10,17 +11,39 @@ def prompt_user_for_input(prompt, valid_selections, invalid_selection_message):
     input_value = ""
     valid_input = False
 
+    # Continue the loop until the input is valid
     while not valid_input:
 
+        # Get the input from the user
         input_value = input(prompt).upper().strip()
 
-        if input_value in valid_selections:
+        # If not valid selections supplied, accept any combination of letters and numbers
+        if len(valid_selections) == 0:
 
-            valid_input = True
+            match = re.match("^[A-Za-z0-9]+$", input_value)
 
+            # If input contains no special characters, mark as valid
+            if match is not None:
+
+                valid_input = True
+
+            # Otherwise repeat
+            else:
+
+                print(invalid_selection_message)
+
+        # Otherwise, check against the list of valid inputs
         else:
 
-            print(invalid_selection_message)
+            # If input is in the valid_selections list, mark as valid
+            if input_value in valid_selections:
+
+                valid_input = True
+
+            # Otherwise repeat
+            else:
+
+                print(invalid_selection_message)
 
     return input_value
 
