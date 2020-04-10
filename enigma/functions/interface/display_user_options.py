@@ -95,6 +95,9 @@ def display_user_options():
             # Begin encryption loop with the chosen config
             encrypt_with_config(config=chosen_config)
 
+            # Print exit message
+            print("\nGoodbye")
+
             return
 
     # If use default config selected, use the default config to encrypt
@@ -102,6 +105,9 @@ def display_user_options():
 
         # Begin encryption loop with the default config
         encrypt_with_config()
+
+        # Print exit message
+        print("\nGoodbye")
 
     if option_choice == 4:
 
