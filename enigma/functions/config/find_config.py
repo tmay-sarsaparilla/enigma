@@ -11,7 +11,7 @@ def get_path_of_user_config_directory():
 
     top_level_path = enigma.__file__
 
-    dir_path = top_level_path.replace("__init__.py", "user_configs\\")
+    dir_path = top_level_path.replace("__init__.py", "user_configs")
 
     return dir_path
 
@@ -19,7 +19,7 @@ def get_path_of_user_config_directory():
 def get_path_from_file_name(file_name, dir_path):
     """Function for getting the file path of a saved config from its name"""
 
-    file_path = dir_path + f"{file_name}.pickle"
+    file_path = dir_path + f"/{file_name}.pickle"
 
     return file_path
 
