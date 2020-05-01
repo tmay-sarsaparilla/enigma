@@ -67,7 +67,7 @@ def encrypt_letter(
 
 if __name__ == "__main__":
 
-    from enigma.functions.config.default_config import config
+    from enigma.functions.config.default_config import default_config
     from enigma.functions.rotors.construct_rotors import construct_rotors
 
     (
@@ -77,7 +77,7 @@ if __name__ == "__main__":
         middleRotor,
         rightRotor,
         reflector
-    ) = construct_rotors(config=config)
+    ) = construct_rotors(config=default_config)
 
     inputLetter = "A"
     letterIndex = 0
