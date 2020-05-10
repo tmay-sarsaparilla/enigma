@@ -2,7 +2,7 @@
 
 from pickle import load
 from os import listdir, path
-from enigma.functions.config.find_config import get_path_of_user_config_directory, get_path_from_file_name
+from enigma.functions.config.find import get_path_of_user_config_directory, get_path_from_file_name
 
 
 def get_saved_config_list():

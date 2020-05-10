@@ -43,7 +43,7 @@ def extract_config(config):
 
 if __name__ == "__main__":
 
-    from enigma.functions.config.default_config import default_config
+    from enigma.settings import default_config
 
     print(default_config)
 

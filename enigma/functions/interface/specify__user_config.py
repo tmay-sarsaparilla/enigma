@@ -2,7 +2,7 @@
 
 import re
 from string import ascii_uppercase
-from enigma.functions.rotors.rotor_configurations import rotor_dict, reflector_dict
+from enigma.functions.rotors import rotor_dict, reflector_dict
 
 
 def prompt_user_for_input(prompt, valid_selections, invalid_selection_message):

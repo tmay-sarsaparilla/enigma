@@ -1,6 +1,8 @@
 """Module for prompting users to supply messages to be encrypted"""
 
-from enigma.functions.interface.__init__ import encrypt, prompt_user_for_input, default_config
+from enigma.functions.interface.specify__user_config import prompt_user_for_input
+from enigma.settings import default_config
+from enigma.functions.encryption import encrypt
 
 
 def encrypt_with_config(config=default_config):

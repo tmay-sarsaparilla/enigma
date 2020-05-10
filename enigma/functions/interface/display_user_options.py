@@ -1,13 +1,8 @@
 """Module for displaying user options"""
 
-from enigma.functions.interface.__init__ import specify_config, \
-    save_config, \
-    load_config, \
-    prompt_user_for_input, \
-    get_saved_config_list, \
-    choose_file_name, \
-    delete_config
-
+from enigma.functions.config import load_config, get_saved_config_list, delete_config
+from enigma.functions.interface.specify__user_config import specify_config, prompt_user_for_input
+from enigma.functions.interface.save_user_config import save_config, choose_file_name
 from enigma.functions.interface.encrypt_with_config import encrypt_with_config
 
 

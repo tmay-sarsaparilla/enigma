@@ -1,6 +1,6 @@
-"""Module containing rotor configurations"""
+"""Module to configure the elements of the enigma machine"""
 
-from enigma.functions.rotors.define_rotors import Rotor, Interface, Switchboard, Reflector
+from enigma.functions.rotors.define import Rotor, Interface, Switchboard, Reflector
 
 # Define rotors configurations
 interface = Interface(0, 0, "A")

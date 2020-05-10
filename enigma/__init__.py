@@ -1,1 +1,3 @@
-from enigma.functions.interface.display_user_options import display_user_options
+"""__init__ module for the engima package"""
+
+from enigma.functions import display_user_options

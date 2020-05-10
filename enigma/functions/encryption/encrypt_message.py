@@ -1,7 +1,6 @@
 """Module to encrypt a message"""
 from enigma.functions.encryption.encrypt_letter import encrypt_letter
-from enigma.functions.rotors.construct_rotors import construct_rotors
-from enigma.functions.rotors.reset_rotors import reset_rotors
+from enigma.functions.rotors import construct_rotors, reset_rotors
 from string import punctuation, whitespace
 from textwrap import wrap
 
@@ -89,7 +88,7 @@ def encrypt(input_message, config):
 
 if __name__ == "__main__":
 
-    from enigma.functions.config.default_config import default_config
+    from enigma.settings import default_config
 
     inputMessage = "Yes I have"
 

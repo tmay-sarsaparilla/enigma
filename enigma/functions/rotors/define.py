@@ -64,7 +64,8 @@ class Rotor:
 
         return rotor, letters, positions
 
-    def pair_letters(self, rotor, letters, positions, chosen_letters):
+    @staticmethod
+    def pair_letters(rotor, letters, positions, chosen_letters):
         """Method for pairing letters together"""
 
         # Loop through each letter

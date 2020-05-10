@@ -67,8 +67,8 @@ def encrypt_letter(
 
 if __name__ == "__main__":
 
-    from enigma.functions.config.default_config import default_config
-    from enigma.functions.rotors.construct_rotors import construct_rotors
+    from enigma.settings import default_config
+    from enigma.functions.rotors import construct_rotors
 
     (
         interface,

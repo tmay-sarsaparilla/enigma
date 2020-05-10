@@ -1,7 +1,7 @@
 """Module for deleting a user config"""
 
 from os import path, remove
-from enigma.functions.config.find_config import get_path_of_user_config_directory, get_path_from_file_name
+from enigma.functions.config.find import get_path_of_user_config_directory, get_path_from_file_name
 
 
 def delete_config(file_name):

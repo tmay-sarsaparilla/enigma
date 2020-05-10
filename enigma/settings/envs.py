@@ -1,5 +1,6 @@
-"""Module containing a default config for the machine"""
+"""Module for defining defaults"""
 
+# Specify default config
 switchboard_pairs = [
 
     ("B", "J"),

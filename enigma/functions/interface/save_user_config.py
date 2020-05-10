@@ -2,8 +2,8 @@
 
 from os import mkdir, path
 from pickle import dump, HIGHEST_PROTOCOL
-from enigma.functions.config.specify_config import prompt_user_for_input
-from enigma.functions.config.find_config import get_path_of_user_config_directory, get_path_from_file_name
+from enigma.functions.interface.specify__user_config import prompt_user_for_input
+from enigma.functions.config import get_path_of_user_config_directory, get_path_from_file_name
 
 
 def create_user_config_directory(dir_path):
@@ -82,6 +82,6 @@ def save_config(config, file_name):
 
 if __name__ == "__main__":
 
-    from enigma.functions.config.default_config import default_config
+    from enigma.settings import default_config
 
     save_config(default_config, "test")
